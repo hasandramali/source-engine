@@ -1,0 +1,22 @@
+name: Build for linux
+
+on: 
+  workflow_dispatch:
+
+jobs:
+  build-android-armv7a:
+    runs-on: ubuntu-20.04
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Build linux64
+      run: |
+        scripts/build-ubuntu-amd64.sh
+        mkdir kompiled-linux
+        ./waf install --destdir=./kompiled-linux/
+
+    - uses: actions/upload-artifact@v3
+      name: Upload Artifacts
+      with:
+        name: kompiled-linuks
+        path: kompiled-linux/
