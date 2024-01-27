@@ -1,0 +1,23 @@
+name: Build for Windows
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build-windows-i386:
+    runs-on: windows-2019
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Build windows-i386
+      run: |
+        git submodule init && git submodule update
+        mkdir installdir
+        ./waf.bat configure -T release
+        ./waf.bat build
+        ./waf.bat install --destdir=./installdir/
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v3
+      with:
+          name: compiled
+          path: installdir/
